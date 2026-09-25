@@ -115,7 +115,7 @@
       background: rgba(255,254,249,0.88);
       backdrop-filter: blur(12px);
       border-radius: 8px;
-      padding: clamp(1.8rem, 4.4vh, 2.3rem) 1.7rem clamp(1.3rem, 3.4vh, 1.9rem);
+      padding: clamp(2.4rem, 5.6vh, 3rem) 1.7rem clamp(1.3rem, 3.4vh, 1.9rem);
       position: relative;
       box-shadow: 0 16px 48px rgba(79,102,64,0.12);
       border: 1px solid rgba(126,154,106,0.25);
@@ -421,7 +421,7 @@
     @media (max-height: 640px) {
       .slide { padding: 3.4rem 1.1rem 4.8rem; }
       .couple-img { height: min(28vh, 290px); }
-      .cover-frame-box { padding: 1.6rem 1.4rem 1.2rem; }
+      .cover-frame-box { padding: 2.1rem 1.4rem 1.2rem; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
@@ -452,9 +452,9 @@
     /* ===== MEMPELAI: AWAN + FOTO ===== */
     .couple-row { display: flex; align-items: center; max-width: 350px; margin: 0 auto 0.3rem; }
     .couple-row.rev { flex-direction: row-reverse; }
-    .portrait { flex: 0 0 38%; margin: 0; position: relative; z-index: 3; filter: drop-shadow(0 8px 12px rgba(47,44,38,0.22)); }
+    .portrait { flex: 0 0 36%; margin: 0; position: relative; z-index: 3; filter: drop-shadow(0 8px 12px rgba(47,44,38,0.22)); }
     .portrait img { display: block; width: 100%; height: auto; }
-    .name-cloud { position: relative; flex: 0 0 84%; margin-left: -22%; z-index: 2; animation: floaty 6s ease-in-out infinite; }
+    .name-cloud { position: relative; flex: 0 0 86%; margin-left: -22%; z-index: 2; animation: floaty 6s ease-in-out infinite; }
     .couple-row.rev .name-cloud { margin-left: 0; margin-right: -22%; animation-delay: -3s; }
     .name-cloud > img { display: block; width: 100%; filter: drop-shadow(0 8px 14px rgba(79,102,64,0.16)); }
     .couple-row.rev .name-cloud > img { transform: scaleX(-1); }
@@ -485,6 +485,43 @@
     @keyframes dust { 0% { opacity: 0; transform: translate3d(0, 0, 0); } 50% { opacity: 0.85; } 100% { opacity: 0; transform: translate3d(12px, -70px, 0); } }
     #ambient::after { content: ''; position: absolute; inset: 0; opacity: 0.07; mix-blend-mode: multiply;
       background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .3 0 0 0 0 .28 0 0 0 0 .2 0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  
+    /* ===== SCROLL VERTIKAL ===== */
+    .slider { display: block; overflow-x: hidden; overflow-y: auto; scroll-snap-type: y proximity; overscroll-behavior: contain; scrollbar-width: none; }
+    .slider::-webkit-scrollbar { display: none; }
+    .slider:focus { outline: none; }
+    .slide { min-width: 0; width: 100%; height: auto; min-height: 100vh; min-height: 100dvh; padding: 4.4rem 1.2rem 4.2rem; }
+    .bottom-nav { top: 50%; bottom: auto; left: auto; right: 7px; height: auto; padding: 0; transform: translateY(-50%); display: block; }
+    .nav-dots { flex-direction: column; gap: 8px; }
+    .dot { position: relative; }
+    .dot::after { content: ''; position: absolute; inset: -7px; }
+    .dot.active { width: 6px; height: 18px; }
+    .scroll-cue { position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 3; font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--sage-dark); text-align: center; animation: cue 2s ease-in-out infinite; }
+    .scroll-cue::after { content: ''; display: block; width: 8px; height: 8px; margin: 6px auto 0; border-right: 1.5px solid var(--sage-dark); border-bottom: 1.5px solid var(--sage-dark); transform: rotate(45deg); }
+    @keyframes cue { 0%, 100% { opacity: 0.5; transform: translate(-50%, 0); } 50% { opacity: 1; transform: translate(-50%, 7px); } }
+    #snow { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+    /* ===== PINTU ===== */
+    .door-set { position: absolute; left: 0; top: 0; width: calc(var(--gw) * 0.5); height: calc(var(--gw) * 0.81); transform: translate(-50%, -50%); perspective: calc(var(--gw) * 1.6); }
+    .glow { position: absolute; inset: 0; opacity: 0; background: radial-gradient(ellipse at 50% 55%, #FFFDF2 0%, #FBF0CF 40%, #EBDDB0 100%); }
+    .leaf { position: absolute; top: 0; width: 50%; height: 100%; box-sizing: border-box; border: 2px solid #C9A961; will-change: transform;
+      background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(0,0,0,0.1)), radial-gradient(circle at 50% 28%, #9DB98B, #6F8C5E 75%); }
+    .leaf.l { left: 0; transform-origin: 0 50%; border-right-width: 1px; }
+    .leaf.r { right: 0; transform-origin: 100% 50%; border-left-width: 1px; }
+    .leaf::before { content: ''; position: absolute; inset: 8% 13% 12% 13%; border: 1.5px solid rgba(232,208,150,0.9); border-radius: 4px; box-shadow: inset 0 0 0 4px rgba(126,154,106,0.35); }
+    .leaf.l::before { border-top-left-radius: calc(var(--gw) * 0.2); }
+    .leaf.r::before { border-top-right-radius: calc(var(--gw) * 0.2); }
+    .leaf::after { content: ''; position: absolute; top: 56%; width: calc(var(--gw) * 0.028); aspect-ratio: 1; border-radius: 50%; border: 2px solid #E2C983; background: radial-gradient(circle at 35% 35%, #FFF1C6, #B58E45); }
+    .leaf.l::after { right: 9%; }
+    .leaf.r::after { left: 9%; }
+  
+    /* teks di dalam awan: skala mengikuti lebar awan (cqw), dibatasi area krem */
+    .name-cloud { container-type: inline-size; }
+    .name-text { top: 0; bottom: 0; left: 26%; right: 21%; padding: 0; }
+    .couple-row.rev .name-text { left: 21%; right: 26%; }
+    .name-text .parent-role { font-size: calc(var(--k, 1) * 3.6cqw); letter-spacing: 0.06em; line-height: 1.25; margin: 0 0 0.6cqw; white-space: nowrap; }
+    .name-text .parent-name { font-size: calc(var(--k, 1) * 7.4cqw); line-height: 1.05; margin: 0 0 0.8cqw; white-space: nowrap; }
+    .name-text .parent-from { font-size: calc(var(--k, 1) * 3.8cqw); line-height: 1.3; margin: 0; white-space: nowrap; }
   </style>
 </head>
 <body>
@@ -524,7 +561,7 @@
 
   <!-- PORTAL (animasi lorong) -->
   <div id="portal" aria-hidden="true">
-    <div class="gate-wrap"><img class="gate" src="assets/gapura.webp" alt="" /><img class="gate-base" src="assets/daun-bawah.webp" alt="" /></div>
+    <div class="gate-wrap"><div class="door-set"><div class="glow"></div><div class="leaf l"></div><div class="leaf r"></div></div><img class="gate" src="assets/gapura.webp" alt="" /><img class="gate-base" src="assets/daun-bawah.webp" alt="" /></div>
     <div class="fol fol-l"></div><div class="fol fol-r"></div>
   </div>
 
@@ -540,11 +577,12 @@
       <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
     </button>
 
-    <div class="slider" id="slider">
+    <div class="slider" id="slider" tabindex="0">
       <!-- 0 HERO -->
       <div class="slide slide-0" data-index="0">
         <img src="assets/clouds.webp" class="side-cloud left" alt="" />
         <img src="assets/clouds.webp" class="side-cloud right" alt="" style="transform: scaleX(-1);" />
+        <div class="scroll-cue">Gulir</div>
 
         <div class="slide-inner">
           <p class="salam-ar">Bismillahirrahmanirrahim</p>
@@ -733,13 +771,13 @@
     </div>
 
     <div class="bottom-nav">
-      <button class="nav-btn" id="prevBtn" disabled>‹</button>
       <div class="nav-dots" id="dots"></div>
-      <button class="nav-btn" id="nextBtn">›</button>
     </div>
   </div>
 
+  <canvas id="snow" aria-hidden="true"></canvas>
   <div id="birds" aria-hidden="true"></div>
+  <!-- LAGU: taruh file di assets/music.mp3 (mis. Juicy Luicy - Lagu Nikah). Potong 60-90 detik dari bagian reff, 128 kbps, supaya ringan. Tombol musik muncul otomatis jika file ada. -->
   <audio id="bgm" src="assets/music.mp3" loop preload="metadata"></audio>
   <div class="toast" id="toast"></div>
 
@@ -785,12 +823,24 @@
       dust.appendChild(d);
     }
     let appStarted = false;
-    function startApp() { if (appStarted) return; appStarted = true; initSlider(); startCountdown(); }
+    function fitNames() {   // pastikan teks tidak keluar dari area krem awan (mis. font belum/sudah termuat)
+      document.querySelectorAll('.name-text').forEach(t => {
+        if (!t.clientWidth) return;
+        let k = 1; t.style.setProperty('--k', 1);
+        for (let i = 0; i < 15 && k > 0.6; i++) {
+          if (Math.max(...[...t.children].map(c => c.getBoundingClientRect().width)) <= t.clientWidth) break;
+          k -= 0.04; t.style.setProperty('--k', k);
+        }
+      });
+    }
+    addEventListener('resize', fitNames);
+    if (document.fonts) document.fonts.ready.then(fitNames);
+    function startApp() { if (appStarted) return; appStarted = true; initSlider(); startCountdown(); fitNames(); }
 
     function runIntro() {
       const cover = document.getElementById('cover'), app = document.getElementById('app'), portal = document.getElementById('portal');
       const wraps = [...portal.querySelectorAll('.gate-wrap')], fl = portal.querySelector('.fol-l'), fr = portal.querySelector('.fol-r');
-      const finish = () => { cover.style.display = 'none'; portal.style.display = 'none'; app.style.cssText = ''; startBirds(); };
+      const finish = () => { cover.style.display = 'none'; portal.style.display = 'none'; app.style.cssText = ''; startBirds(); startSnow(); };
       document.getElementById('openBtn').disabled = true;
       cover.classList.add('go');
       playMusic();
@@ -799,12 +849,14 @@
       app.style.transition = 'none'; app.style.opacity = '0'; app.style.zIndex = '2050';
       if (reduceMotion) { app.style.opacity = '1'; startApp(); cover.classList.add('hidden'); setTimeout(finish, 900); return; }
 
-      const gw = wraps[0].firstElementChild.offsetWidth;
+      const gw = wraps[0].querySelector('.gate').offsetWidth, leaves = portal.querySelectorAll('.leaf'), glow = portal.querySelector('.glow');
       const need = 2.4 * Math.max(innerWidth / (GATE.opw * gw), innerHeight / (GATE.oph * gw * GATE.ar));  // skala saat lubang gapura memenuhi layar
-      const lnF = Math.log(need * 1.25), D = 2800, t0 = performance.now();   // D = durasi (ms)
+      const lnF = Math.log(need * 1.25), D = 3400, t0 = performance.now();   // D = durasi (ms)
       (function frame(now) {
         const p = Math.min(1, (now - t0) / D);
-        const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+        const oa = 1 - Math.pow(1 - Math.min(1, Math.max(0, (p - 0.1) / 0.32)), 3);   // pintu terbuka (easeOutCubic)
+        leaves[0].style.transform = 'rotateY(' + 104 * oa + 'deg)'; leaves[1].style.transform = 'rotateY(' + -104 * oa + 'deg)'; glow.style.opacity = oa;
+        const zp = Math.min(1, Math.max(0, (p - 0.28) / 0.72)), e = zp < 0.5 ? 2 * zp * zp : 1 - Math.pow(-2 * zp + 2, 2) / 2;   // zoom menembus setelah pintu terbuka
         const F = Math.exp(lnF * e);
         wraps.forEach((w, k) => {
           const sc = F * Math.pow(GATE.r, k);
@@ -818,6 +870,28 @@
       })(t0);
     }
     document.getElementById('openBtn').addEventListener('click', runIntro);
+
+    // ====== SALJU (Desember) ======
+    function startSnow() {
+      if (reduceMotion) return;
+      const cv = document.getElementById('snow'), ctx = cv.getContext('2d'), dpr = Math.min(2, devicePixelRatio || 1);
+      let W, H, flakes = [];
+      const mk = init => { const r = Math.random(); return { x: Math.random() * W, y: init ? Math.random() * H : -10, r: 1.4 + r * r * 3.6, v: 0.35 + r * 0.9, s: Math.random() * 6.28, a: 0.5 + r * 0.45 }; };
+      const fit = () => { W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        flakes = Array.from({ length: Math.round(Math.min(90, W * H / 9000)) }, () => mk(true)); };
+      fit(); addEventListener('resize', fit);
+      (function loop() {
+        if (!document.hidden) {
+          ctx.clearRect(0, 0, W, H); ctx.shadowColor = 'rgba(110,140,130,0.45)'; ctx.shadowBlur = 5;
+          for (const f of flakes) {
+            f.y += f.v; f.s += 0.012;
+            if (f.y > H + 10) Object.assign(f, mk(false));
+            ctx.beginPath(); ctx.arc(f.x + Math.sin(f.s) * 6 * f.r, f.y, f.r, 0, 6.283); ctx.fillStyle = 'rgba(255,255,255,' + f.a + ')'; ctx.fill();
+          }
+        }
+        requestAnimationFrame(loop);
+      })();
+    }
 
     // ====== BURUNG TERBANG (atlas assets/birds.webp: 4 kolom x 2 baris) ======
     function startBirds() {
@@ -838,60 +912,42 @@
     }
 
     let current = 0;
-    const total = 8;
+    const total = 8, PALETTE = [0, 1, 2, 0, 1, 2, 1, 0];
     const slider = document.getElementById('slider');
-    const slides = document.querySelectorAll('.slide');
+    const slides = [...document.querySelectorAll('.slide')];
     const progress = document.getElementById('progress');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
     const dotsEl = document.getElementById('dots');
 
+    function setCurrent(i) {
+      current = i;
+      document.querySelectorAll('.dot').forEach((d, k) => d.classList.toggle('active', k === i));
+      document.querySelectorAll('.amb-bg').forEach((b, k) => b.classList.toggle('on', k === PALETTE[i]));
+    }
+    function goTo(i) { slides[i].scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+
     function initSlider() {
-      for (let i = 0; i < total; i++) {
+      slides.forEach((s, i) => {
         const d = document.createElement('div');
         d.className = 'dot' + (i === 0 ? ' active' : '');
         d.addEventListener('click', () => goTo(i));
         dotsEl.appendChild(d);
-      }
+      });
       slides[0].classList.add('active');
-      updateUI();
+      const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); }), { root: slider, threshold: 0.2 });
+      slides.forEach(s => io.observe(s));
+      let ticking = false;
+      slider.addEventListener('scroll', () => {
+        if (ticking) return; ticking = true;
+        requestAnimationFrame(() => {
+          ticking = false;
+          const max = slider.scrollHeight - slider.clientHeight;
+          progress.style.width = (max > 0 ? slider.scrollTop / max * 100 : 0) + '%';
+          const mid = innerHeight / 2, i = slides.findIndex(s => { const r = s.getBoundingClientRect(); return r.top <= mid && r.bottom > mid; });
+          if (i >= 0 && i !== current) setCurrent(i);
+        });
+      }, { passive: true });
+      slider.focus({ preventScroll: true });
     }
-
-    function goTo(index) {
-      if (index < 0 || index >= total) return;
-      current = index;
-      slider.scrollTo({ left: index * window.innerWidth, behavior: 'smooth' });
-      slides.forEach((s, i) => s.classList.toggle('active', i === index));
-      updateUI();
-    }
-
-    function updateUI() {
-      progress.style.width = ((current + 1) / total * 100) + '%';
-      prevBtn.disabled = current === 0;
-      nextBtn.disabled = current === total - 1;
-      document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
-      document.querySelectorAll('.amb-bg').forEach((b, i) => b.classList.toggle('on', i === [0, 1, 2, 0, 1, 2, 1, 0][current]));
-    }
-
-    prevBtn.addEventListener('click', () => goTo(current - 1));
-    nextBtn.addEventListener('click', () => goTo(current + 1));
-    window.addEventListener('resize', () => slider.scrollTo({ left: current * window.innerWidth, behavior: 'auto' }));
-
-    let startX = 0, swipeOk = true;
-    slider.addEventListener('touchstart', e => { swipeOk = !e.target.closest('input, select, textarea'); startX = e.touches[0].clientX; }, { passive: true });
-    slider.addEventListener('touchend', e => {
-      if (!swipeOk) return;
-      const diff = startX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 50) {
-        if (diff > 0) goTo(current + 1);
-        else goTo(current - 1);
-      }
-    }, { passive: true });
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'ArrowRight') goTo(current + 1);
-      if (e.key === 'ArrowLeft') goTo(current - 1);
-    });
 
     function startCountdown() {
       const target = new Date('2026-12-26T09:00:00+07:00').getTime();
