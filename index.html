@@ -299,12 +299,8 @@
       position: relative;
     }
 
-    /* Backgrounds: pemandangan scene.webp di semua slide, diredam wash lembut supaya teks tetap terbaca */
-    .slide { background: url('assets/scene.webp') center/cover no-repeat; }
-    .slide::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(246,240,238,0.72) 0%, rgba(246,240,238,0.88) 100%);
-    }
+    /* Backgrounds: slide transparan, pemandangan ada di #ambient yang diam (lihat di bawah) */
+    .slide { background: transparent; }
 
     .parent-role { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--sage-dark); margin-bottom: 0.28rem; }
     .parent-name { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 500; margin-bottom: 0.15rem; }
@@ -473,14 +469,12 @@
     @keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
     @keyframes floatyMirror { 0%, 100% { transform: scaleX(-1) translateY(0); } 50% { transform: scaleX(-1) translateY(-7px); } }
   
-    /* ===== AMBIENT BACKGROUND: satu gradien menerus (anti-seam) ===== */
+    /* ===== AMBIENT BACKGROUND: diam di tempat, hanya konten yang scroll di atasnya ===== */
     .slider { position: relative; }
-    #ambient { position: absolute; top: 0; left: 0; right: 0; height: 100%; z-index: 0; overflow: hidden; pointer-events: none;
-      background: linear-gradient(180deg,
-        #E3D5D3 0%, #E3D5D3 6%, #F2E6E3 13%, #EEE0DD 19%,
-        #E6C6C5 25%, #ECD3D1 31%, #DDCECB 37%, #D6CBC8 44%,
-        #E3D5D3 50%, #F2E6E3 57%, #EEE0DD 63%, #E6C6C5 69%,
-        #DDCECB 75%, #D6CBC8 81%, #E3D5D3 88%, #ECE1DE 94%, #EEE0DD 100%); }
+    #ambient { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(246,240,238,0.72) 0%, rgba(246,240,238,0.88) 100%),
+        url('assets/scene.webp') center/cover no-repeat; }
     .orb { position: absolute; width: max(70vw, 320px); aspect-ratio: 1; border-radius: 50%; }
     .o1 { top: 2%; left: -22%; background: radial-gradient(circle, rgba(173,123,134,0.3), transparent 66%); }
     .o2 { top: 46%; right: -26%; background: radial-gradient(circle, rgba(201,166,160,0.4), transparent 66%); }
@@ -800,6 +794,7 @@
       address: 'Jl. Kadudampit No. 8, Sukamanah, Kec. Cisaat, Kab. Sukabumi, Jawa Barat 43132',
       mapUrl: 'https://www.google.com/maps/search/?api=1&query=-6.8880953,106.9001196&query_place_id=ChIJh-mB1l43aC4RnfLV3Q4Cq94',
       waNumber: '6289680603633',   // TODO: pastikan ini nomor WA aktif Hilal untuk menerima RSVP (diasumsikan sama dgn nomor DANA)
+      sheetUrl: '',   // TODO: tempel URL Web App dari Google Apps Script di sini agar RSVP otomatis masuk spreadsheet (lihat Code.gs)
       gifts: [
         { icon: '🏦', label: 'Transfer Bank', bank: 'BNI', number: '0830697506', name: 'Hilal Lazuardi' },
         { icon: '📱', label: 'E-Wallet', bank: 'DANA', number: '089680603633', name: 'Hilal Lazuardi' }
@@ -831,9 +826,8 @@
     const ss = (a, b, x) => { x = Math.min(1, Math.max(0, (x - a) / (b - a))); return x * x * (3 - 2 * x); };
     function seedDust() {
       const dust = document.getElementById('dust');
-      const n = Math.round(14 * Math.max(1, document.getElementById('slider').scrollHeight / innerHeight));
       dust.innerHTML = '';
-      for (let i = 0; i < Math.min(n, 70); i++) {
+      for (let i = 0; i < 18; i++) {
         const d = document.createElement('i'), z = 2 + Math.random() * 3;
         d.style.cssText = 'left:' + Math.random() * 100 + '%;top:' + Math.random() * 100 + '%;width:' + z + 'px;height:' + z + 'px;';
         dust.appendChild(d);
@@ -972,12 +966,7 @@
       slides[0].classList.add('active');
       const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); }), { root: slider, threshold: 0.2 });
       slides.forEach(s => io.observe(s));
-      const ambient = document.getElementById('ambient');
-      const sizeAmbient = () => { ambient.style.height = slider.scrollHeight + 'px'; };
-      sizeAmbient(); seedDust();
-      new ResizeObserver(sizeAmbient).observe(slider);
-      addEventListener('resize', sizeAmbient);
-      if (document.fonts) document.fonts.ready.then(() => { sizeAmbient(); seedDust(); });
+      seedDust();
       let ticking = false;
       slider.addEventListener('scroll', () => {
         if (ticking) return; ticking = true;
@@ -1023,6 +1012,20 @@
       fallPetals();
       window.open(url, '_blank', 'noopener');
       if (navigator.vibrate) navigator.vibrate([10, 40, 10]);
+
+      // Catat juga ke Google Sheet kalau CONFIG.sheetUrl sudah diisi (lihat Code.gs)
+      if (CONFIG.sheetUrl) {
+        fetch(CONFIG.sheetUrl, {
+          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({
+            waktu: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }),
+            nama: $('guestName').value.trim(),
+            kehadiran: hadir ? 'InsyaAllah hadir' : 'Berhalangan',
+            jumlahTamu: hadir ? $('guestCount').value : '-',
+            ucapan: $('message').value.trim()
+          })
+        }).catch(() => {});   // diam-diam gagal kalau offline/URL belum diisi, RSVP tetap sukses lewat WhatsApp
+      }
     });
 
     function copyRek(type, num) {
